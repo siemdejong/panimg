@@ -51,6 +51,16 @@ class EyeChoice(str, Enum):
 MAXIMUM_SEGMENTS_LENGTH = 64
 
 
+
+def copy(src: Path, dst: Path):
+    # Source - https://stackoverflow.com/a/11835950
+    # Posted by ecatmur, modified by community. See post 'Timeline' for change history
+    # Retrieved 2026-01-27, License - CC BY-SA 3.0
+    if dst.is_dir():
+        dst = dst / src.name
+    shutil.copyfile(src, dst)
+
+
 @dataclass(frozen=True)
 class PanImg:
     pk: UUID
@@ -324,7 +334,7 @@ class TIFFImage(BaseModel):
             segments=self.segments,
         )
 
-        shutil.copy(src=self.file, dst=output_file)
+        copy(src=self.file, dst=output_file)
 
         new_files = {
             PanImgFile(
